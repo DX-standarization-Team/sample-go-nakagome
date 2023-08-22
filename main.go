@@ -5,17 +5,20 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/DX-standarization-Team/sample-go-nakagome/handlers"
+	"sample-go-nakagome/handlers"
 )
 
 func main() {
 
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
 	hh := handlers.NewHello(l)
+	
+	sm := http.NewServeMux()
+	sm.Handle("/", hh)
 	// GO httpパッケージのMUXにpathを登録するメソッド
 	// MUX：Httpハンドラーデフォルトサーバ
 	http.HandleFunc("/", func(rw http.ResponseWriter, r*http.Request){
-		
+		log.Println("hello")	
 	})
 	http.HandleFunc("/getUser", func(http.ResponseWriter, *http.Request){
 		log.Println("getUser")	
