@@ -1,8 +1,14 @@
 package data
 
-import "time"
+import (
+	"encoding/json"
+	"io"
+	"time"
+)
 
+// mod. 1
 // Product defines the structure for an API product
+// `json:"id"`: id にリネーム、"-"": キーを返さない、 "omniempty": 空であればキーを返さない
 type Product struct {
 	ID          int     `json:"id"`
 	Name        string  `json:"name"`
@@ -14,6 +20,22 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
+type Products []*Product
+
+// ToJSON コンテンツのコレクションをJSONにシリアライズする
+// NewEncoder は json.Unmarshal に比べてよいパフォーマンスを提供する
+// アウトプットをインメモリのバイトスライスにバッファーしなくていいから
+// サービスのオーバーヘッドを削減する
+//
+// https://golang.org/pkg/encoding/json/#NewEncoder
+func (p *Products) ToJSON(w io.Writer)error{
+	e := json.NewEncoder(w)
+	return e.Encode(p)
+}
+
+func GetProducts()Products{
+	return productList
+}
 
 // productList is a hard coded list of products for this
 // example data source
