@@ -1,24 +1,26 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-
-	"sample-go-nakagome/handlers"
 )
 
 func main() {
-
-	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hh := handlers.NewHello(l)
-	
-	sm := http.NewServeMux()
-	sm.Handle("/", hh)
 	// GO httpパッケージのMUXにpathを登録するメソッド
 	// MUX：Httpハンドラーデフォルトサーバ
 	http.HandleFunc("/", func(rw http.ResponseWriter, r*http.Request){
-		log.Println("hello")	
+		log.Println("hello")
+		d, err := ioutil.ReadAll(r.Body)
+		if err != nil{
+			http.Error(rw, "Ooops", http.StatusBadRequest)
+			// rw.WriteHeader(http.StatusBadRequest)
+			// rw.Write([]byte("Ooops"))
+		return
+		}
+	
+		fmt.Fprintf(rw, "Hello %s", d)
 	})
 	http.HandleFunc("/getUser", func(http.ResponseWriter, *http.Request){
 		log.Println("getUser")	
