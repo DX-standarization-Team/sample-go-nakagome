@@ -11,13 +11,14 @@ import (
 	"sample-go-nakagome/handlers"
 )
 
-// v3 以下のmodifications
-// 1. Productsデータ用意
-// 2. Products Handler作成
+// v4 以下のmodifications
+// 1. post method作成
+// 2. Decoder作成
+// 3. put method作成
 func main() {
 
 	l := log.New(os.Stdout, "sample-api-1", log.LstdFlags)
-	// mod. 2
+
 	ph := handlers.NewProducts(l)
 	sm := http.NewServeMux()
 	sm.Handle("/", ph)

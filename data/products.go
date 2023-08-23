@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-// mod. 1
 // Product defines the structure for an API product
 // `json:"id"`: id にリネーム、"-"": キーを返さない、 "omniempty": 空であればキーを返さない
 type Product struct {
@@ -33,8 +32,33 @@ func (p *Products) ToJSON(w io.Writer)error{
 	return e.Encode(p)
 }
 
+// mod2. create decoder
+func (p *Product) FromJSON(r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(p)
+}
+
 func GetProducts()Products{
 	return productList
+}
+func AddProduct(p *Product){
+	p.ID = getNextID()
+	productList = append(productList, p)
+}
+func getNextID() int {
+	lp := productList[len(productList) -1]
+	return lp.ID + 1
+}
+func UpdateProduct(id int, p*Product) error {
+	lp := productList[len(productList) -1]
+	return lp.ID + 1
+}
+func findProduct() (*Product, error) {
+	for_, p := range productList{
+		f p.ID == id {
+			return p, nil
+		}
+	}
 }
 
 // productList is a hard coded list of products for this
