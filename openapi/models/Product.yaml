@@ -1,0 +1,38 @@
+type: object
+x-examples:
+  Example 1:
+    id: 1
+    name: Latte
+    description: Beverage that contains milk and espresso shot
+    price: 400
+    sku: 111111
+    createdOn: "2023-8-1"
+    updatedOn: "2023-8-1"
+    deletedOn: "2023-8-1"
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  description:
+    type: string
+  price:
+    type: integer
+    format: int32
+  sku:
+    type: string
+  createdOn:
+    type: string
+    format: date
+  updatedOn:
+    type: string
+    format: date
+  deletedOn:
+    type: string
+    format: date
+required:
+  - id
+  - name
+  - description
+  - price
+  - sku

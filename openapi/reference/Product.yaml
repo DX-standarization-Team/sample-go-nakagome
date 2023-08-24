@@ -1,0 +1,258 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 9zvrcvxmqhndj
+info:
+  title: サンプル用商品管理API
+  version: "1.0"
+  description: 商品情報管理用のサンプルAPIサーバです。
+  contact:
+    name: APIサポートチーム
+    url: "https://example.com/support/"
+    email: support@example.com
+  termsOfService: "https://example.com/terms/"
+  license:
+    name: API License
+    url: https://example.com/licenses/LICENSE.html
+servers:
+  - url: "http://localhost:9090"
+    description: ローカル開発環境
+  - url: "https://samplehost/api/v1"
+    description: 本番サーバ
+  - url: "https://{name}:{port}/api/v1"
+    description: 検証サーバ
+tags:
+  - name: "products"
+    description: "商品の操作"
+paths:
+  "/products":
+    get:
+      summary: "商品一覧の取得"
+      tags: ["products"]
+      responses:
+        "200":
+          description: "成功"
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: ../models/Product.yaml
+              examples:
+                Get Product Alice Smith:
+                  value:
+                    - id: 142
+                      firstName: Alice
+                      lastName: Smith
+                      email: alice.smith@gmail.com
+                      dateOfBirth: "1997-10-31"
+                      emailVerified: true
+                      signUpDate: "2019-08-24"
+        "404":
+          description: Product Not Found
+      operationId: get-products
+      description: Retrieve the information of the all products.
+      x-stoplight:
+        id: r6tx91kxf0533
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+  "/product/{productId}":
+    parameters:
+      - schema:
+          type: string
+        name: productId
+        description: "商品識別ID"
+        in: path
+        required: true
+    get:
+      summary: Retrieve a product information
+      tags: ["products"]
+      responses:
+        "200":
+          description: Product Found
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: ../models/Product.yaml
+        "404":
+          description: Product Not Found
+      operationId: get-product
+      description: Retrieve the information of the all products.
+      x-stoplight:
+        id: b7xpjmck9se5c
+    patch:
+      summary: Update Product Information
+      operationId: patch-products-productId
+      responses:
+        "200":
+          description: Product Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              examples:
+                Updated Product Coffee:
+                  value:
+                    id: 13
+                    name: Coffee
+                    description: Cup of coffee
+                    price: 500
+                    sku: "100010"
+                    createdOn: "2019-08-24"
+                    updatedOn: "2019-08-24"
+                    deletedOn: "2019-08-24"
+        "404":
+          description: Product Not Found
+        "409":
+          description: Name Already Taken
+      description: Update the information of an existing product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+                  description: Without tax
+                  format: int32
+                sku:
+                  type: string
+            examples:
+              Update Name:
+                value:
+                  name: Cappuccino
+              Update Price:
+                value:
+                  price: 450
+              Update Name & Price:
+                value:
+                  name: Cappuccino
+                  price: 500
+        description: Patch product properties to update.
+      x-stoplight:
+        id: 27spocq79y843
+  "/":
+    post:
+      x-stoplight:
+        id: b9e60e4aafd1a
+      description: "Add a product"
+      summary: Add a product'
+      operationId: "post-product"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  id: 1
+                  name: Latte
+                  description: Beverage that contains milk and espresso shot
+                  price: 400
+                  sku: 111111
+                  createdOn: "2023-8-1"
+                  updatedOn: "2023-8-1"
+                  deletedOn: "2023-8-1"
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: integer
+                sku:
+                  type: string
+                createdOn:
+                  type: string
+                  format: date
+                updatedOn:
+                  type: string
+                  format: date
+                deletedOn:
+                  type: string
+                  format: date
+            examples:
+              Example 1:
+                value:
+                  name: Latte
+                  description: Beverage that contains milk and espresso shot
+                  price: 400
+                  sku: "111111"
+                  createdOn: "2021-01-30"
+                  updatedOn: "2023-08-01"
+                  deletedOn: "2023-08-01"
+    parameters: []
+components:
+  schemas:
+    Product:
+      title: Product
+      type: object
+      x-stoplight:
+        id: v6q3ueoscfkgt
+      examples:
+        - id: 1
+          name: Latte
+          description: Beverage that contains milk and espresso shot
+          price: 400
+          sku: 111111
+          createdOn: "2023-8-1"
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the given product.
+          x-stoplight:
+            id: 4sy4o7ytpbib6
+        name:
+          type: string
+          x-stoplight:
+            id: imfgaq1861cob
+        description:
+          type: string
+          x-stoplight:
+            id: g44jsckdpu0pb
+        price:
+          type: number
+          x-stoplight:
+            id: 7y8nlk0luoojj
+          format: float
+        sku:
+          type: string
+          x-stoplight:
+            id: iqa1fn0rh92wi
+        createOn:
+          type: string
+          format: date
+          description: The date that the product was created.
+          x-stoplight:
+            id: wbhxekykvx0hp
+          example: "1997-10-31"
+        updatedOn:
+          type: string
+          x-stoplight:
+            id: i15bfd0fvgetb
+          format: date
+          example: "1997-10-31"
+          description: The date that the product was updated.
+        deletedOn:
+          type: string
+          x-stoplight:
+            id: silnax92h56ad
+          format: date
+          example: "1997-10-31"
+          description: The date that the product was deleted.
+      required:
+        - id
+        - name
+        - description
+        - price
+        - sku
+      description: ""
+  securitySchemes: {}
